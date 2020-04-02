@@ -204,3 +204,20 @@ func MergePodSpecUpdates(current *corev1.PodSpec, revised *corev1.PodSpec, name 
 
 	return result
 }
+
+// MergeServiceSpecUpdates merges the current and revised spec of the service object
+func MergeServiceSpecUpdates(current *corev1.ServiceSpec, revised *corev1.ServiceSpec, name string) bool {
+	scopedLog := log.WithName("MergeServiceSpecUpdates").WithValues("name", name)
+	result := false
+
+	// check for changes in Ports
+	if resources.CompareServicePorts(current.Ports, revised.Ports) {
+		scopedLog.Info("Service Ports differs",
+			"current", current.Ports,
+			"revised", revised.Ports)
+		current.Ports = revised.Ports
+		result = true
+	}
+	
+	return result
+}

@@ -165,10 +165,11 @@ func GetSplunkService(cr enterprisev1.MetaObject, spec enterprisev1.CommonSpec, 
 		Kind:       "Service",
 		APIVersion: "v1",
 	}
+
 	service.ObjectMeta.Name = GetSplunkServiceName(instanceType, cr.GetIdentifier(), isHeadless)
 	service.ObjectMeta.Namespace = cr.GetNamespace()
 	service.Spec.Selector = getSplunkLabels(cr.GetIdentifier(), instanceType)
-	service.Spec.Ports = resources.SortServicePorts(getSplunkServicePorts(instanceType)) // note that port order is important for tests
+	service.Spec.Ports = append(resources.SortServicePorts(getSplunkServicePorts(instanceType))) // note that port order is important for tests
 
 	// ensure labels and annotations are not nil
 	if service.ObjectMeta.Labels == nil {
