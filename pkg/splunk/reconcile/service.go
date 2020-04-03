@@ -44,7 +44,7 @@ func ApplyService(client ControllerClient, revised *corev1.Service) error {
 
 	// only update if there are material differences, as determined by comparison function
 	if hasUpdates {
-	scopedLog.Info("Updating existing Service")
+		scopedLog.Info("Updating existing Service")
 		return UpdateResource(client, revised)
 	}
 

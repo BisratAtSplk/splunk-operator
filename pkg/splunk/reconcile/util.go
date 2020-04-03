@@ -218,6 +218,6 @@ func MergeServiceSpecUpdates(current *corev1.ServiceSpec, revised *corev1.Servic
 		current.Ports = revised.Ports
 		result = true
 	}
-	
+
 	return result
 }
