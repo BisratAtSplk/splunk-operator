@@ -520,7 +520,7 @@ func TestMergeServiceSpecUpdates(t *testing.T) {
 	revised.Type = corev1.ServiceTypeNodePort
 	matcher = func() bool { return current.Type == revised.Type }
 	svcUpdateTester("Service Type changed")
-	
+
 	current.ExternalName = "splunk.example.com"
 	revised.ExternalName = "splunk2.example.com"
 	matcher = func() bool { return current.ExternalName == revised.ExternalName }
@@ -528,6 +528,6 @@ func TestMergeServiceSpecUpdates(t *testing.T) {
 
 	current.ExternalTrafficPolicy = corev1.ServiceExternalTrafficPolicyTypeLocal
 	revised.ExternalTrafficPolicy = corev1.ServiceExternalTrafficPolicyTypeCluster
-	matcher = func() bool { return current.ExternalTrafficPolicy == revised.ExternalTrafficPolicy}
+	matcher = func() bool { return current.ExternalTrafficPolicy == revised.ExternalTrafficPolicy }
 	svcUpdateTester("Service ExternalTrafficPolicy changed")
 }

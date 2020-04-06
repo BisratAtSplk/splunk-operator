@@ -293,7 +293,7 @@ func CompareIPLists(a []string, b []string) bool {
 	}
 
 	return false
-} 
+}
 
 // GetIstioAnnotations returns a map of istio annotations for a pod template
 func GetIstioAnnotations(ports []corev1.ContainerPort) map[string]string {
