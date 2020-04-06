@@ -496,11 +496,38 @@ func TestMergeServiceSpecUpdates(t *testing.T) {
 	// check new Port added
 	revised.Ports = []corev1.ServicePort{{Name: "new-port-added", Port: 32000}}
 	matcher = func() bool { return reflect.DeepEqual(current.Ports, revised.Ports) }
-	svcUpdateTester("Svc Port added")
+	svcUpdateTester("Service Ports added")
 
 	// check Port changed
-	revised.Ports = []corev1.ServicePort{{Name: "port-changed", Port: 32000}}
 	current.Ports = []corev1.ServicePort{{Name: "port-changed", Port: 32320}}
+	revised.Ports = []corev1.ServicePort{{Name: "port-changed", Port: 32000}}
 	matcher = func() bool { return reflect.DeepEqual(current.Ports, revised.Ports) }
-	svcUpdateTester("Svc Port change")
+	svcUpdateTester("Service Ports change")
+
+	// new ExternalIPs
+	revised.ExternalIPs = []string{"1.2.3.4"}
+	matcher = func() bool { return reflect.DeepEqual(current.ExternalIPs, revised.ExternalIPs) }
+	svcUpdateTester("Service ExternalIPs added")
+
+	// updated ExternalIPs
+	current.ExternalIPs = []string{"1.2.3.4"}
+	revised.ExternalIPs = []string{"1.1.3.4"}
+	matcher = func() bool { return reflect.DeepEqual(current.ExternalIPs, revised.ExternalIPs) }
+	svcUpdateTester("Service ExternalIPs changed")
+
+	// Type change
+	current.Type = corev1.ServiceTypeClusterIP
+	revised.Type = corev1.ServiceTypeNodePort
+	matcher = func() bool { return current.Type == revised.Type }
+	svcUpdateTester("Service Type changed")
+	
+	current.ExternalName = "splunk.example.com"
+	revised.ExternalName = "splunk2.example.com"
+	matcher = func() bool { return current.ExternalName == revised.ExternalName }
+	svcUpdateTester("Service ExternalName changed")
+
+	current.ExternalTrafficPolicy = corev1.ServiceExternalTrafficPolicyTypeLocal
+	revised.ExternalTrafficPolicy = corev1.ServiceExternalTrafficPolicyTypeCluster
+	matcher = func() bool { return current.ExternalTrafficPolicy == revised.ExternalTrafficPolicy}
+	svcUpdateTester("Service ExternalTrafficPolicy changed")
 }

@@ -158,7 +158,10 @@ func GetSplunkService(cr enterprisev1.MetaObject, spec enterprisev1.CommonSpec, 
 	var service *corev1.Service
 	if isHeadless {
 		service = &corev1.Service{}
+
+		// Initialize to defaults
 		service.Spec.ClusterIP = corev1.ClusterIPNone
+		service.Spec.Type = corev1.ServiceTypeClusterIP
 	} else {
 		service = spec.ServiceTemplate.DeepCopy()
 	}
@@ -237,6 +240,10 @@ func setServiceTemplateDefaults(spec *enterprisev1.CommonSplunkSpec) {
 				p.TargetPort.IntVal = p.Port
 			}
 		}
+	}
+
+	if spec.CommonSpec.ServiceTemplate.Spec.Type == "" {
+		spec.CommonSpec.ServiceTemplate.Spec.Type = corev1.ServiceTypeClusterIP
 	}
 }
 

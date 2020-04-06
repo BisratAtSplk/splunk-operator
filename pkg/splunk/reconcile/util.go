@@ -210,6 +210,39 @@ func MergeServiceSpecUpdates(current *corev1.ServiceSpec, revised *corev1.Servic
 	scopedLog := log.WithName("MergeServiceSpecUpdates").WithValues("name", name)
 	result := false
 
+	// check service Type
+	if current.Type != revised.Type {
+		scopedLog.Info("Service Type differs",
+			"current", current.Type,
+			"revised", revised.Type)
+		current.Type = revised.Type
+		result = true
+	}
+
+	if current.ExternalName != revised.ExternalName {
+		scopedLog.Info("External Name differs",
+			"current", current.ExternalName,
+			"revised", revised.ExternalName)
+		current.ExternalName = revised.ExternalName
+		result = true
+	}
+
+	if current.ExternalTrafficPolicy != revised.ExternalTrafficPolicy {
+		scopedLog.Info("External Traffic Policy differs",
+			"current", current.ExternalTrafficPolicy,
+			"revised", revised.ExternalTrafficPolicy)
+		current.ExternalTrafficPolicy = revised.ExternalTrafficPolicy
+		result = true
+	}
+
+	if resources.CompareIPLists(current.ExternalIPs, revised.ExternalIPs) {
+		scopedLog.Info("External IPs differs",
+			"current", current.ExternalIPs,
+			"revised", revised.ExternalIPs)
+		current.ExternalIPs = revised.ExternalIPs
+		result = true
+	}
+
 	// check for changes in Ports
 	if resources.CompareServicePorts(current.Ports, revised.Ports) {
 		scopedLog.Info("Service Ports differs",

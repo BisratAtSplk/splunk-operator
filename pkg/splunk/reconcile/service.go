@@ -35,9 +35,6 @@ func ApplyService(client ControllerClient, revised *corev1.Service) error {
 		return CreateResource(client, revised)
 	}
 
-	// found existing Service: do nothing
-	scopedLog.Info("Found existing Service")
-
 	// check for changes in service template
 	hasUpdates := MergeServiceSpecUpdates(&current.Spec, &revised.Spec, current.GetObjectMeta().GetName())
 	*revised = current // caller expects that object passed represents latest state
